@@ -4,12 +4,13 @@ import axios from 'axios';
 
 const Exercise = props => (
   <tr>
-    <td>{props.exercise.username}</td>
-    <td>{props.exercise.description}</td>
-    <td>{props.exercise.duration}</td>
-    <td>{props.exercise.date.substring(0,10)}</td>
+    <td>{props.product.username}</td>
+    <td>{props.product.description}</td>
+    <td><iframe src={props.product.link} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen></iframe></td>
+    {/* <td>{props.product.date.substring(0,10)}</td> */}
     <td>
-      <Link to={"/edit/"+props.exercise._id}>edit</Link> | <a href="#" onClick={() => { props.deleteExercise(props.exercise._id) }}>delete</a>
+      <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#" onClick={() => { props.deleteExercise(props.product._id) }}>delete</a>
     </td>
   </tr>
 )
@@ -20,48 +21,43 @@ export default class ExercisesList extends Component {
 
     this.deleteExercise = this.deleteExercise.bind(this)
 
-    this.state = {exercises: []};
+    this.state = {exercises: [],
+    product:[]};
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/exercises/')
-      .then(response => {
-        this.setState({ exercises: response.data })
-        
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    
       axios.get('http://localhost:5000/product/')
       .then(response => {
         this.setState({ product: response.data })
-        console.log(response.data);
         
       })
       .catch((error) => {
         console.log(error);
       });
+
   }
 
   deleteExercise(id) {
-    axios.delete('http://localhost:5000/exercises/'+id)
+    axios.delete('http://localhost:5000/product/'+id)
       .then(response => { console.log(response.data)});
 
     this.setState({
-      exercises: this.state.exercises.filter(el => el._id !== id)
+      product: this.state.product.filter(el => el._id !== id)
     })
   }
 
   exerciseList() {
-    return this.state.exercises.map(currentexercise => {
-      return <Exercise exercise={currentexercise} deleteExercise={this.deleteExercise} key={currentexercise._id}/>;
+    return this.state.product.map(currentproduct => {
+      return <Exercise product={currentproduct} deleteExercise={this.deleteExercise} key={currentproduct._id}/>;
     })
   }
 
   render() {
+    console.log(this.state.product);
     return (
       <div>
-        <h3>Logged Exercises</h3>
+        <h3>Materials</h3>
         <table className="table">
           <thead className="thead-light">
             <tr>

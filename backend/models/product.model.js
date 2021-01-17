@@ -7,11 +7,11 @@ const productSchema = new Schema({
   type: {type: String, required: true},
   description: { type: String, required: true },
   link: { type: String, required: true, unique: true, trim: true, minlength: 3},
-  date: { type: Date, required: true },
+  
 }, {
   timestamps: true,
 });
 
-const Exercise = mongoose.model('Exercise', productSchema);
+const Product = mongoose.model('Product', productSchema);
 
-module.exports = Exercise;
+module.exports = Product;
