@@ -1,6 +1,6 @@
 {
   "apiPrefix": "mongodb+srv://bahdan:<password>@cluster0.asxk9.mongodb.net/",
-  "severPort": "8080",
+  "serverPort": "8080",
   "db": {
     "name": "notes"    
   }
