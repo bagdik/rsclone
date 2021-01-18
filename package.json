@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/bagdik/rs-library#readme",
   "devDependencies": {
-    "express": "4.17.1"
+    "babel": "5.8.38",
+    "body-parser": "1.19.0",
+    "express": "4.17.1",
+    "mongoose": "5.11.12"
   }
 }
