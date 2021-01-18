@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from "react-router-dom"
 import axios from 'axios';
 
 export default class CreateUser extends Component {
@@ -13,9 +14,10 @@ export default class CreateUser extends Component {
 
     this.state = {
       username: '',
-      type: '',
+      type: 'Video',
       description:'',
       link:'',
+      redirect: false,
     }
   }
 
@@ -42,7 +44,7 @@ export default class CreateUser extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
+    
     const product = {
       username: this.state.username,
         type: this.state.type,
@@ -53,16 +55,21 @@ export default class CreateUser extends Component {
     console.log(product);
 
     axios.post('http://localhost:5000/product/add', product)
-      .then(res => console.log(res.data));
+      // .then(res => console.log(res.data))
+      .then(() => this.setState({ redirect: "/productlist" }));
+    
+    
 
-    this.setState({
-      username: ''
-    })
   }
+  
 
   render() {
-    return (
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
+    return (      
       <div>
+        
         <h3>Create Material</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group"> 
@@ -74,12 +81,17 @@ export default class CreateUser extends Component {
                 onChange={this.onChangeUsername}
                 />
             <label>Type: </label>
-            <input  type="text"
-                required
+            <select 
                 className="form-control"
-                value={this.state.type}
+                defaultValue='Video'
                 onChange={this.onChangeType}
-                />
+                required            
+                >
+                  <option  value='Video'>Video</option>
+                  <option value='Link'>Link</option>
+                  <option value='Book'>Book</option>
+
+                </select>
             <label>Description: </label>
             <input  type="text"
                 required

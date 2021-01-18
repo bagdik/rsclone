@@ -5,13 +5,16 @@ import axios from 'axios';
 const Exercise = props => (
   <tr>
     <td>{props.product.username}</td>
+    <td>{props.product.type}</td>
     <td>{props.product.description}</td>
-    <td><iframe src={props.product.link} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-    allowFullScreen></iframe></td>
+    <td><a  target="_blank" href={props.product.link}>{props.product.link}</a></td>
     {/* <td>{props.product.date.substring(0,10)}</td> */}
     <td>
-      <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#" onClick={() => { props.deleteExercise(props.product._id) }}>delete</a>
+      <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteExercise(props.product._id) }}>delete</a>
     </td>
+    
+    <td> <button className="button" onClick={() => { props.addLike(props.product._id) }}>like</button> {props.product.likes}</td>
+    <td><button className="button" onClick = {() => {props.addDislike(props.product._id)}}>dislike</button> {props.product.dislikes}</td>
   </tr>
 )
 
@@ -20,6 +23,8 @@ export default class ExercisesList extends Component {
     super(props);
 
     this.deleteExercise = this.deleteExercise.bind(this)
+    this.addLike = this.addLike.bind(this)
+    this.addDislike = this.addDislike.bind(this)
 
     this.state = {exercises: [],
     product:[]};
@@ -47,9 +52,25 @@ export default class ExercisesList extends Component {
     })
   }
 
+  addLike(id) {
+    axios.post('http://localhost:5000/product/update/likes/'+id)
+      .then(response => { console.log(response.data)});
+      let arr = this.state.product.filter(el => el._id === id)
+      console.log(arr[0]);
+      
+  }
+
+  addDislike(id) {
+    axios.post('http://localhost:5000/product/update/dislikes/'+id)
+      .then(response => { console.log(response.data)});
+      let arr = this.state.product.filter(el => el._id === id)
+      console.log(arr[0]);
+ 
+  }
+
   exerciseList() {
     return this.state.product.map(currentproduct => {
-      return <Exercise product={currentproduct} deleteExercise={this.deleteExercise} key={currentproduct._id}/>;
+      return <Exercise product={currentproduct} deleteExercise={this.deleteExercise} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id}/>;
     })
   }
 
@@ -62,10 +83,11 @@ export default class ExercisesList extends Component {
           <thead className="thead-light">
             <tr>
               <th>Username</th>
+              <th>Type</th>
               <th>Description</th>
-              <th>Duration</th>
-              <th>Date</th>
-              <th>Actions</th>
+              <th>Link</th>
+              <th>Action</th>
+              <th colSpan={2}>Popular</th>
             </tr>
           </thead>
           <tbody>

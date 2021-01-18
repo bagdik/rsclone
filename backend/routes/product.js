@@ -55,5 +55,29 @@ router.route('/update/:id').post((req, res) => {
     })
     .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/update/likes/:id').post((req, res) => {
+    Product.findById(req.params.id)
+    .then(product => {
+      console.log(product.likes);
+      product.likes += 1;
+
+      product.save()
+        .then(() => res.json('product updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/update/dislikes/:id').post((req, res) => {
+    Product.findById(req.params.id)
+    .then(product => {      
+      product.dislikes += 1;
+
+      product.save()
+        .then(() => res.json('product updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 
 module.exports = router;
