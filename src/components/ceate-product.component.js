@@ -9,12 +9,14 @@ export default class CreateUser extends Component {
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
+    this.onChangeTheme = this.onChangeTheme.bind(this);
     this.onChangeLink = this.onChangeLink.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       username: '',
       type: 'Video',
+      theme: 'Html',
       description:'',
       link:'',
       redirect: false,
@@ -29,6 +31,11 @@ export default class CreateUser extends Component {
   onChangeType(e) {
     this.setState({
       type: e.target.value
+    })
+  }
+  onChangeTheme(e) {
+    this.setState({
+      theme: e.target.value
     })
   }
   onChangeDescription(e) {
@@ -49,6 +56,7 @@ export default class CreateUser extends Component {
       username: this.state.username,
         type: this.state.type,
         description: this.state.description,
+        theme: this.state.theme,
         link: this.state.link
     }
 
@@ -92,6 +100,19 @@ export default class CreateUser extends Component {
                   <option value='Book'>Book</option>
 
                 </select>
+            <label>Theme: </label>
+            <select 
+                className="form-control"
+                defaultValue='Html'
+                onChange={this.onChangeTheme}
+                required            
+                >
+                  <option  value='Html'>Html</option>
+                  <option value='Css'>Css</option>
+                  <option value='JS'>JS</option>
+                  <option value='Webpac'>Webpac</option>
+                  <option value='ES Lint'>ES Lint</option>
+                </select>
             <label>Description: </label>
             <input  type="text"
                 required
@@ -108,7 +129,7 @@ export default class CreateUser extends Component {
                 />
           </div>
           <div className="form-group">
-            <input type="submit" value="Create User" className="btn btn-primary" />
+            <input type="submit" value="Create Material" className="btn btn-primary" />
           </div>
         </form>
       </div>

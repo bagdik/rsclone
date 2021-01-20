@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import SortMaterials from './sort-materials-list.component';
+
 const Exercise = props => (
   <tr>
     <td>{props.product.username}</td>
+    <td>{props.product.theme}</td>
     <td>{props.product.type}</td>
     <td>{props.product.description}</td>
     <td><a  target="_blank" href={props.product.link}>{props.product.link}</a></td>
@@ -25,9 +28,9 @@ export default class ExercisesList extends Component {
     this.deleteExercise = this.deleteExercise.bind(this)
     this.addLike = this.addLike.bind(this)
     this.addDislike = this.addDislike.bind(this)
+    //this.SortList = this.SortList.bind(this)
 
-    this.state = {exercises: [],
-    product:[]};
+    this.state = {product:[]};
   }
 
   componentDidMount() {
@@ -42,6 +45,8 @@ export default class ExercisesList extends Component {
       });
 
   }
+  
+  
 
   deleteExercise(id) {
     axios.delete('http://localhost:5000/product/'+id)
@@ -63,9 +68,30 @@ export default class ExercisesList extends Component {
   addDislike(id) {
     axios.post('http://localhost:5000/product/update/dislikes/'+id)
       .then(response => { console.log(response.data)});
-      let arr = this.state.product.filter(el => el._id === id)
-      console.log(arr[0]);
+      let arr = this.state.product.filter(el => el._id === id);
+      
  
+  }
+  SortList =(materials) => {
+    axios.get('http://localhost:5000/product/')
+      .then(response => {
+        if(materials.theme !== 'All'){
+        
+          response.data = response.data.filter(el => el.theme === materials.theme);
+        }
+         
+         if(materials.type !== 'All'){
+         
+          response.data = response.data.filter(el => el.type === materials.type);
+          }
+        this.setState({ product: response.data })
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    
+        
   }
 
   exerciseList() {
@@ -79,10 +105,12 @@ export default class ExercisesList extends Component {
     return (
       <div>
         <h3>Materials</h3>
+        <SortMaterials action = {this.SortList}/>
         <table className="table">
           <thead className="thead-light">
             <tr>
               <th>Username</th>
+              <th>Theme</th>
               <th>Type</th>
               <th>Description</th>
               <th>Link</th>
