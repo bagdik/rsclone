@@ -11,7 +11,8 @@ router.route('/add').post((req, res) => {
   const username = req.body.username;
   const type = req.body.type;
   const description = req.body.description;
-  const link = req.body.type;
+  const theme = req.body.theme;
+  const link = req.body.link;
  
   const date = Date.parse(req.body.date);
 
@@ -19,6 +20,7 @@ router.route('/add').post((req, res) => {
     username,
     type,
     description,
+    theme,
     link,
     date,
   });
@@ -46,8 +48,33 @@ router.route('/update/:id').post((req, res) => {
       product.username = req.body.username;
       product.type = req.body.type;
       product.description = req.body.description;
+      product.theme = req.body.theme;
       product.link = req.body.link;      
       product.date = Date.parse(req.body.date);
+
+      product.save()
+        .then(() => res.json('product updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+router.route('/update/likes/:id').post((req, res) => {
+    Product.findById(req.params.id)
+    .then(product => {
+      console.log(product.likes);
+      product.likes += 1;
+
+      product.save()
+        .then(() => res.json('product updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/update/dislikes/:id').post((req, res) => {
+    Product.findById(req.params.id)
+    .then(product => {      
+      product.dislikes += 1;
 
       product.save()
         .then(() => res.json('product updated!'))
