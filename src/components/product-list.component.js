@@ -13,11 +13,11 @@ const Exercise = props => (
     <td><a  target="_blank" href={props.product.link}>{props.product.link}</a></td>
     {/* <td>{props.product.date.substring(0,10)}</td> */}
     <td>
-      <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteExercise(props.product._id) }}>delete</a>
+      <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
     </td>
     
-    <td> <button className="button" onClick={() => { props.addLike(props.product._id) }}>like</button> {props.product.likes}</td>
-    <td><button className="button" onClick = {() => {props.addDislike(props.product._id)}}>dislike</button> {props.product.dislikes}</td>
+    <td> <button className="button" onClick={() => { props.addLike(props.product._id) }}>like</button> <span id="numLike">{props.product.likes}</span></td>
+    <td><button className="button" onClick = {() => {props.addDislike(props.product._id)}}>dislike</button> <span id="numDislike">{props.product.dislikes}</span></td>
   </tr>
 )
 
@@ -25,20 +25,19 @@ export default class ExercisesList extends Component {
   constructor(props) {
     super(props);
 
-    this.deleteExercise = this.deleteExercise.bind(this)
+    this.deleteProduct = this.deleteProduct.bind(this)
     this.addLike = this.addLike.bind(this)
     this.addDislike = this.addDislike.bind(this)
-    //this.SortList = this.SortList.bind(this)
 
     this.state = {product:[]};
   }
 
   componentDidMount() {
     
+    
       axios.get('http://localhost:5000/product/')
       .then(response => {
-        this.setState({ product: response.data })
-        
+        this.setState({ product: response.data })        
       })
       .catch((error) => {
         console.log(error);
@@ -48,7 +47,7 @@ export default class ExercisesList extends Component {
   
   
 
-  deleteExercise(id) {
+  deleteProduct(id) {
     axios.delete('http://localhost:5000/product/'+id)
       .then(response => { console.log(response.data)});
 
@@ -59,16 +58,19 @@ export default class ExercisesList extends Component {
 
   addLike(id) {
     axios.post('http://localhost:5000/product/update/likes/'+id)
-      .then(response => { console.log(response.data)});
-      let arr = this.state.product.filter(el => el._id === id)
-      console.log(arr[0]);
+    .then(response => {    
+      this.setState({ product: this.state.product.map((el) => {if(el._id === id){ el.likes++ } return el;}) })
+      
+    })
       
   }
 
   addDislike(id) {
     axios.post('http://localhost:5000/product/update/dislikes/'+id)
-      .then(response => { console.log(response.data)});
-      let arr = this.state.product.filter(el => el._id === id);
+      .then(response => {
+        this.setState({ product: this.state.product.map((el) => {if(el._id === id){ el.dislikes++ } return el;}) })
+      });
+     
       
  
   }
@@ -89,23 +91,31 @@ export default class ExercisesList extends Component {
       })
       .catch((error) => {
         console.log(error);
-      });
-    
-        
+      });            
   }
+  
+  sortByLikes = () =>{
+    this.setState({product: this.state.product.sort((a, b) => b.likes - a.likes)});
+  }
+  sortByPopular = () =>{
+    this.setState({product: this.state.product.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes))});
+  }
+  // sortByPopular = () =>{
+  //   this.setState({product: this.state.product.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes))});
+  // }
 
   exerciseList() {
     return this.state.product.map(currentproduct => {
-      return <Exercise product={currentproduct} deleteExercise={this.deleteExercise} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id}/>;
+      return <Exercise product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id}/>;
     })
   }
 
   render() {
-    console.log(this.state.product);
+ 
     return (
       <div>
         <h3>Materials</h3>
-        <SortMaterials action = {this.SortList}/>
+        <SortMaterials action = {this.SortList} sortLikes = {this.sortByLikes} sortPopular = {this.sortByPopular}/>
         <table className="table">
           <thead className="thead-light">
             <tr>
