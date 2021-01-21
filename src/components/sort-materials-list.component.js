@@ -14,15 +14,29 @@ export default class SortMaterials extends Component {
     }
   }
   
-  onChangeType(e) {
-    this.setState({
-      type: e.target.value
-    })
+  onChangeType(e) {   
+    const product = {     
+      type: e.target.value,        
+      theme: this.state.theme,      
+  }
+  this.props.action(product);
+
+  this.setState({
+    type: e.target.value
+  })
   }
   onChangeTheme(e) {
-    this.setState({
-      theme: e.target.value
-    })
+    
+
+    const product = {     
+      type: this.state.type,        
+      theme: e.target.value,      
+  }
+  this.props.action(product);
+  this.setState({
+    theme: e.target.value
+  })
+    
   }
   
 
@@ -32,20 +46,20 @@ export default class SortMaterials extends Component {
         type: this.state.type,        
         theme: this.state.theme,      
     }
-    this.props.action(product);
-    console.log(product);
+    this.props.sortLikes();
+   
 
   }
   
 
   render() {   
     return (      
-      <div>
+      <div className = "m-2">
         
-        <h3>Create Material</h3>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">            
-            <label>Type: </label>
+        <h3>Sort Material</h3>
+        <form onSubmit={this.onSubmit} className = "row g-3 align-middle">
+          <div className="col-4">            
+            <label className = "form-lable">Type: </label>
             <select 
                 className="form-control"
                 defaultValue='All'
@@ -58,6 +72,8 @@ export default class SortMaterials extends Component {
                   <option value='Book'>Book</option>
 
                 </select>
+                </div>
+                <div className="col-4">
             <label>Theme: </label>
             <select 
                 className="form-control"
@@ -74,8 +90,9 @@ export default class SortMaterials extends Component {
                 </select>
            
           </div>
-          <div className="form-group">
-            <input type="submit" value="Sort" className="btn btn-primary" />
+          <div className="col-4 align-self-end">
+            <input type="button" value="Sort" onClick = {this.props.sortLikes} className="btn btn-primary w-50" />
+            <input type="button" value="Popular" onClick = {this.props.sortPopular} className="btn btn-primary w-50" />
           </div>
         </form>
       </div>
