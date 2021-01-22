@@ -6,6 +6,7 @@ import Navbar from "./components/navbar.component"
 import CreateUser from "./components/create-user.component";
 import CreateProduct from './components/ceate-product.component';
 import ProductList from './components/product-list.component';
+import Login from './components/login.component';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Route path="/user" component={CreateUser} />
       <Route path="/product" component={CreateProduct} />
       <Route path="/productlist" component={ProductList} />
+      <Route path="/login" component={Login} />
       </div>
     </Router>
   );
