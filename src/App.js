@@ -10,16 +10,11 @@ import CreateUser from "./components/create-user.component";
 import CreateProduct from './components/ceate-product.component';
 import ProductList from './components/product-list.component';
 import Login from './components/login.component';
-//import LogOut from './components/logout.component'
-import LogOutUser from './components/logout.component';
 
 
 
-function App() {
-  
-  //const bae = useAuth;
-  //console.log(useAuthentication());
-  //console.log(useLogin());
+function App() { 
+
   const {token, login, logout, userId} = useAuthentication();
   const isAuthenticated = !!token
 
@@ -29,9 +24,9 @@ function App() {
     }}>
       <Router>
         <div className="container">
-          <h3>sdasadasd</h3>
+         
           {console.log(isAuthenticated)}
-           <LogOutUser show = {isAuthenticated}/>
+        
         <Navbar />
         <br/>
         <Route path="/" exact component={ProductList} />      
