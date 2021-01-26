@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, useContext} from 'react';
+import ErrorMessage from './error-message.component';
 import axios from 'axios';
+import {AuthContext} from '../context/auth.context'
+
 
 export default class LoginUser extends Component {
   constructor(props) {
     super(props);
+    
     
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -11,7 +15,8 @@ export default class LoginUser extends Component {
 
     this.state = {     
       email: '',
-      password: ''
+      password: '',
+      errorMessage : '',
     }
   }
 
@@ -34,17 +39,41 @@ export default class LoginUser extends Component {
       email: this.state.email,
       password: this.state.password
     }
-
+    const auth = this.context;
+    console.log(auth);
     
 
     axios.post('http://localhost:5000/users/login/auth', user)
-      .then(res => console.log(res.data));    
+      .then((res, req) => {
+          console.log(res.message);
+          console.log(req);
+        if(res.status === 200){
+            //localStorage.setItem('token' , res.data.token);
+            console.log(this.context);
+            console.log(auth.login(res.data.token, res.data.userId));
+            console.log(res.data.userId);
+            auth.login(res.data.token, res.data.userId);
+        }})
+        .catch(
+            (error) => {            
+            console.log(error.response.data.message)
+            this.setState({
+                errorMessage: error.response.data.message
+            });
+            setTimeout(() => {
+                this.setState({errorMessage : "" })
+              }, 3000);
+          });    
   }
 
   render() {
+      console.log(this.context)
+      //console.log(AuthContext._currentValue)
     return (
+         
       <div>
         <h3>Login</h3>
+        <ErrorMessage message = {this.state.errorMessage} />
         <form onSubmit={this.onSubmit}>          
           <div>
             <label>Email: </label>
@@ -72,3 +101,4 @@ export default class LoginUser extends Component {
     )
   }
 }
+LoginUser.contextType = AuthContext;
