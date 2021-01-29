@@ -9,6 +9,11 @@ router.route('/').get((req, res) => {
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/:id').get((req, res) => {
+  User.findById(req.params.id)
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 
 router.post('/add',body('email').isEmail(), body("username").isLength({ min: 5 }), check('password', 'min length is 5 symbols').isLength({ min: 5 }), async (req, res) => {
   const errors = validationResult(req);
