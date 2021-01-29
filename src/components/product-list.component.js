@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import {AuthContext} from '../context/auth.context';
 import SortMaterials from './sort-materials-list.component';
 
-const Exercise = props => (
+const Exercise = props => {
+  let actionsEditDelite = null;
+  if(props.isAdmin){
+    actionsEditDelite =  <td>
+    <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
+  </td>
+  } 
+  return (
   <tr>
     <td>{props.product.username}</td>
     <td>{props.product.theme}</td>
@@ -12,16 +19,17 @@ const Exercise = props => (
     <td>{props.product.description}</td>
     <td><a  target="_blank" href={props.product.link}>{props.product.link}</a></td>
     {/* <td>{props.product.date.substring(0,10)}</td> */}
-    <td>
+    {actionsEditDelite}
+    {/* <td>
       <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
-    </td>
+    </td> */}
     
     <td> <button className="button" onClick={() => { props.addLike(props.product._id) }}>like</button> <span id="numLike">{props.product.likes}</span></td>
     <td><button className="button" onClick = {() => {props.addDislike(props.product._id)}}>dislike</button> <span id="numDislike">{props.product.dislikes}</span></td>
   </tr>
-)
+)}
 
-export default class ExercisesList extends Component {
+export default class ProductList extends Component {
   constructor(props) {
     super(props);
 
@@ -32,12 +40,10 @@ export default class ExercisesList extends Component {
     this.state = {product:[]};
   }
 
-  componentDidMount() {
-    
-    
+  componentDidMount() {    
       axios.get('http://localhost:5000/product/')
       .then(response => {
-        this.setState({ product: response.data })        
+        this.setState({ product: response.data })
       })
       .catch((error) => {
         console.log(error);
@@ -100,18 +106,23 @@ export default class ExercisesList extends Component {
   sortByPopular = () =>{
     this.setState({product: this.state.product.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes))});
   }
-  // sortByPopular = () =>{
-  //   this.setState({product: this.state.product.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes))});
-  // }
+  
 
   exerciseList() {
     return this.state.product.map(currentproduct => {
-      return <Exercise product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id}/>;
+      return <Exercise product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.isAdmin()}/>;
     })
+  }
+  isAdmin(){
+    
+    if(this.context.userId ===  '600b34dbe842de806057ac6c') {
+      return true;
+    }
   }
 
   render() {
- 
+    let tableAction = this.isAdmin() ?  <th>Action</th> : null;
+ console.log(this.isAdmin());
     return (
       <div>
         <h3>Materials</h3>
@@ -124,7 +135,8 @@ export default class ExercisesList extends Component {
               <th>Type</th>
               <th>Description</th>
               <th>Link</th>
-              <th>Action</th>
+              {tableAction}
+              {/* <th>Action</th> */}
               <th colSpan={2}>Popular</th>
             </tr>
           </thead>
@@ -136,3 +148,5 @@ export default class ExercisesList extends Component {
     )
   }
 }
+
+ProductList.contextType = AuthContext;

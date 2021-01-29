@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom"
 import axios from 'axios';
+import {AuthContext} from '../context/auth.context'
 
-export default class CreateUser extends Component {
+export default class CreateProduct extends Component {
   constructor(props) {
     super(props);
 
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    //this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
@@ -21,13 +22,27 @@ export default class CreateUser extends Component {
       link:'',
       redirect: false,
     }
+    
+   
   }
 
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value
-    })
+  componentDidMount(){
+    if(this.context.userId){
+      axios.get('http://localhost:5000/users/'+this.context.userId)
+      .then(response => {
+        this.setState({ username: response.data.username })
+        console.log(this.state.username)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   }
+  // onChangeUsername(e) {
+  //   this.setState({
+  //     username: e.target.value
+  //   })
+  // }
   onChangeType(e) {
     this.setState({
       type: e.target.value
@@ -48,6 +63,7 @@ export default class CreateUser extends Component {
       link: e.target.value
     })
   }
+  
 
   onSubmit(e) {
     e.preventDefault();
@@ -64,14 +80,13 @@ export default class CreateUser extends Component {
 
     axios.post('http://localhost:5000/product/add', product)
       // .then(res => console.log(res.data))
-      .then(() => this.setState({ redirect: "/productlist" }));
-    
-    
-
+      .then(() => this.setState({ redirect: "/productlist" })); 
   }
+ 
   
 
   render() {
+    console.log(this.context);
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }
@@ -81,13 +96,13 @@ export default class CreateUser extends Component {
         <h3>Create Material</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group"> 
-            <label>Username: </label>
+            {/* <label>Username: </label>
             <input  type="text"
                 required
                 className="form-control"
                 value={this.state.username}
                 onChange={this.onChangeUsername}
-                />
+                /> */}
             <label>Type: </label>
             <select 
                 className="form-control"
@@ -136,3 +151,4 @@ export default class CreateUser extends Component {
     )
   }
 }
+CreateProduct.contextType = AuthContext;
