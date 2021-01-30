@@ -10,6 +10,8 @@ import CreateUser from "./components/create-user.component";
 import CreateProduct from './components/ceate-product.component';
 import ProductList from './components/product-list.component';
 import Login from './components/login.component';
+import UsersList from './components/users.component';
+
 
 
 
@@ -34,6 +36,7 @@ function App() {
         <Route path="/product" component={CreateProduct} />
         <Route path="/productlist" component={ProductList} />
         <Route path="/login" component={Login} />
+        <Route path="/userslist" component={UsersList} />
         </div>
       </Router>
     </AuthContext.Provider>

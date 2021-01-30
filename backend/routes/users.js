@@ -36,6 +36,12 @@ router.post('/add',body('email').isEmail(), body("username").isLength({ min: 5 }
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/:id').delete((req, res) => {
+  User.findByIdAndDelete(req.params.id)
+  .then(() => res.json('product deleted.'))
+  .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.post('/login/auth',body('email').isEmail(), check('password', 'min length is 5 symbols').isLength({ min: 5 }), async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
