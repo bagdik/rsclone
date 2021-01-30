@@ -15,7 +15,7 @@ router.route('/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.post('/add',body('email').isEmail(), body("username").isLength({ min: 5 }), check('password', 'min length is 5 symbols').isLength({ min: 5 }), async (req, res) => {
+router.post('/add',body('email').isEmail(), body("username").isLength({ min: 5 }), check('password', 'password min length is 5 symbols').isLength({ min: 5 }), async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
