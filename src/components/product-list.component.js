@@ -127,7 +127,7 @@ export default class ProductList extends Component {
   }
   isAdmin(){
     
-    if(this.context.userId ===  '600b34dbe842de806057ac6c') {
+    if(this.context.userId ===  '6015e0f48bc61bbb6c8400f3') {
       return true;
     }
   }
@@ -147,8 +147,7 @@ export default class ProductList extends Component {
               <th>Type</th>
               <th>Description</th>
               <th>Link</th>
-              {tableAction}
-              {/* <th>Action</th> */}
+              {tableAction}              
               <th colSpan={2}>Popular</th>
             </tr>
           </thead>
