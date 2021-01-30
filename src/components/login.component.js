@@ -1,4 +1,4 @@
-import React, { Component, useContext} from 'react';
+import React, { Component } from 'react';
 import ErrorMessage from './error-message.component';
 import axios from 'axios';
 import {AuthContext} from '../context/auth.context'
@@ -49,14 +49,12 @@ export default class LoginUser extends Component {
           console.log(req);
         if(res.status === 200){
             //localStorage.setItem('token' , res.data.token);
-            console.log(this.context);
-            console.log(auth.login(res.data.token, res.data.userId));
-            console.log(res.data.userId);
+            console.log(this.context);    
             auth.login(res.data.token, res.data.userId);
         }})
         .catch(
             (error) => {            
-            console.log(error.response.data.message)
+            console.log(error.response.data.errors)
             this.setState({
                 errorMessage: error.response.data.message
             });

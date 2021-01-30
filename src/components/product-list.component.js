@@ -3,13 +3,29 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {AuthContext} from '../context/auth.context';
 import SortMaterials from './sort-materials-list.component';
+import Like from '../image/like.png';
+import Dislike from '../image/dislike.png';
+import '../styles/style.css';
 
-const Exercise = props => {
+const Material = props => {
   let actionsEditDelite = null;
+  let likes = null;
+  let dislikes = null;
+
   if(props.isAdmin){
     actionsEditDelite =  <td>
     <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
   </td>
+  } 
+  if(props.isAuthenticated){
+    likes =<td className="cursor-pointer justify-content-center d-flex flex-column align-items-center">
+    <img src={Like} height = '30px' alt = 'Like' onClick={() => { props.addLike(props.product._id) }}/> 
+    <span id="numDislike">{props.product.likes}</span>
+    </td>
+    dislikes = <td className="cursor-pointer ">
+    <img src={Dislike} height = '30px' alt = 'Disike' onClick = {() => {props.addDislike(props.product._id)}}/>
+   <span id="numDislike">{props.product.dislikes}</span>
+   </td>
   } 
   return (
   <tr>
@@ -17,15 +33,11 @@ const Exercise = props => {
     <td>{props.product.theme}</td>
     <td>{props.product.type}</td>
     <td>{props.product.description}</td>
-    <td><a  target="_blank" href={props.product.link}>{props.product.link}</a></td>
-    {/* <td>{props.product.date.substring(0,10)}</td> */}
+    <td><a  target="_blank" href={props.product.link}>{props.product.link}</a></td>    
     {actionsEditDelite}
-    {/* <td>
-      <Link to={"/edit/"+props.product._id}>edit</Link> | <a href="#"  onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
-    </td> */}
+    {likes}
+    {dislikes}
     
-    <td> <button className="button" onClick={() => { props.addLike(props.product._id) }}>like</button> <span id="numLike">{props.product.likes}</span></td>
-    <td><button className="button" onClick = {() => {props.addDislike(props.product._id)}}>dislike</button> <span id="numDislike">{props.product.dislikes}</span></td>
   </tr>
 )}
 
@@ -108,9 +120,9 @@ export default class ProductList extends Component {
   }
   
 
-  exerciseList() {
+  materialList() {
     return this.state.product.map(currentproduct => {
-      return <Exercise product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.isAdmin()}/>;
+      return <Material product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.isAdmin()} isAuthenticated={this.context.isAuthenticated}/>;
     })
   }
   isAdmin(){
@@ -141,7 +153,7 @@ export default class ProductList extends Component {
             </tr>
           </thead>
           <tbody>
-            { this.exerciseList() }
+            { this.materialList() }
           </tbody>
         </table>
       </div>

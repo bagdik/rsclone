@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ErrorMessage from './error-message.component';
 
 export default class CreateUser extends Component {
   constructor(props) {
@@ -13,7 +14,8 @@ export default class CreateUser extends Component {
     this.state = {
       username: '',
       email: '',
-      password: ''
+      password: '',
+      errorMessage:null
     }
   }
 
@@ -42,19 +44,35 @@ export default class CreateUser extends Component {
       password: this.state.password,
     }
 
-    console.log(user);
-
     axios.post('http://localhost:5000/users/add', user)
-      .then(res => console.log(res.data));
+      .then(res => console.log(res.data))
+      .catch(
+        (error) => {            
+        console.log(error.response.data.message)
+        console.log(error.response.data.errors)
+        let msg='';
+        error.response.data.errors.forEach(element => {
+          msg+= element.msg +'\n';
+        });
+        this.setState({
+            errorMessage: msg, 
+        });
+        setTimeout(() => {
+            this.setState({errorMessage : "" })
+          }, 4000);
+      });    
+      
 
     this.setState({
       username: ''
+      
     })
   }
 
   render() {
     return (
       <div>
+        <ErrorMessage message = {this.state.errorMessage} />
         <h3>Create New User</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group"> 
