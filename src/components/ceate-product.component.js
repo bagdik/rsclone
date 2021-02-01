@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Redirect } from "react-router-dom"
+import { Redirect } from "react-router-dom";
+import ErrorMessage from './error-message.component';
 import axios from 'axios';
 import {AuthContext} from '../context/auth.context'
 
@@ -21,6 +22,7 @@ export default class CreateProduct extends Component {
       description:'',
       link:'',
       redirect: false,
+      errorMessage:null
     }
     
    
@@ -75,11 +77,20 @@ export default class CreateProduct extends Component {
         theme: this.state.theme,
         link: this.state.link
     }
+    let RegExp = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/;
 
-    console.log(product);
+    if(!RegExp.test(this.state.link)){ 
+      this.setState({
+        errorMessage: "Link is not valid", 
+    });
+    setTimeout(() => {
+        this.setState({errorMessage : "" })
+      }, 4000);
 
-    axios.post('http://localhost:5000/product/add', product)
-      // .then(res => console.log(res.data))
+     return false;
+    }
+
+    axios.post('http://localhost:5000/product/add', product)     
       .then(() => this.setState({ redirect: "/productlist" })); 
   }
  
@@ -94,6 +105,7 @@ export default class CreateProduct extends Component {
       <div>
         
         <h3>Create Material</h3>
+        <ErrorMessage message= {this.state.errorMessage} />
         <form onSubmit={this.onSubmit}>
           <div className="form-group"> 
             {/* <label>Username: </label>

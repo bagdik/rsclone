@@ -28,9 +28,6 @@ function App() {
     }}>
       <Router>
         <div className="container">
-         
-          {console.log(isAuthenticated)}
-        
         <Navbar />
         <br/>
         <Route path="/" exact component={ProductList} />      

@@ -49,15 +49,14 @@ export default class UsersList extends Component {
   SortList =(materials) => {
     axios.get('http://localhost:5000/product/')
       .then(response => {
-        if(materials.theme !== 'All'){
-        
+        if(materials.theme !== 'All'){        
           response.data = response.data.filter(el => el.theme === materials.theme);
         }
          
-         if(materials.type !== 'All'){
-         
+         if(materials.type !== 'All'){         
           response.data = response.data.filter(el => el.type === materials.type);
           }
+
         this.setState({ product: response.data })
         
       })
@@ -68,15 +67,10 @@ export default class UsersList extends Component {
   
   userList() {
     return this.state.user.map(currentproduct => {
-      return <User user={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.isAdmin()} isAuthenticated={this.context.isAuthenticated}/>;
+      return <User user={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.context.isAdmin} isAuthenticated={this.context.isAuthenticated}/>;
     })
   }
-  isAdmin(){
-    
-    if(this.context.userId ===  '600b34dbe842de806057ac6c') {
-      return true;
-    }
-  }
+  
 
   render() {
  
