@@ -122,19 +122,13 @@ export default class ProductList extends Component {
 
   materialList() {
     return this.state.product.map(currentproduct => {
-      return <Material product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.isAdmin()} isAuthenticated={this.context.isAuthenticated}/>;
+      return <Material product={currentproduct} deleteProduct={this.deleteProduct} addLike={this.addLike} addDislike = {this.addDislike} key={currentproduct._id} isAdmin = {this.context.isAdmin} isAuthenticated={this.context.isAuthenticated}/>;
     })
   }
-  isAdmin(){
-    
-    if(this.context.userId ===  '6015e0f48bc61bbb6c8400f3') {
-      return true;
-    }
-  }
-
+  
   render() {
-    let tableAction = this.isAdmin() ?  <th>Action</th> : null;
- console.log(this.isAdmin());
+    let tableAction = this.context.isAdmin ?  <th>Action</th> : null;
+ 
     return (
       <div>
         <h3>Materials</h3>

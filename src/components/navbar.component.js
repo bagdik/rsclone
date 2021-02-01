@@ -6,15 +6,20 @@ import LogOutUser from './logout.component';
 export default class Navbar extends Component {
 
   render() {
+    let userList = null;
+    if(this.context.isAdmin){
+      userList = <li className="navbar-item">
+      <Link to="/userslist" className="nav-link">Users</Link>
+      </li>;  
+    } 
+    
     if(this.context.isAuthenticated){
       return(
         <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
         <Link to="/" className="navbar-brand">Materials</Link>
         <div className="collpase navbar-collapse">
         <ul className="navbar-nav mr-auto">  
-        <li className="navbar-item">
-          <Link to="/userslist" className="nav-link">Users</Link>
-          </li>       
+             {userList}
           <li className="navbar-item">
           <Link to="/product" className="nav-link">Create Product</Link>
           </li>
