@@ -15,7 +15,7 @@ export default class CreateUser extends Component {
       username: '',
       email: '',
       password: '',
-      errorMessage:null
+      errorMessage: null,
     }
   }
 
@@ -24,11 +24,13 @@ export default class CreateUser extends Component {
       username: e.target.value
     })
   }
+
   onChangePassword(e) {
     this.setState({
       password: e.target.value
     })
   }
+
   onChangeEmail(e) {
     this.setState({
       email: e.target.value
@@ -45,62 +47,54 @@ export default class CreateUser extends Component {
     }
 
     axios.post('http://localhost:5000/users/add', user)
-      .then(res => console.log(res.data))
+      
       .catch(
-        (error) => {            
-        console.log(error.response.data.message)
-        console.log(error.response.data.errors)
-        let msg='';
-        error.response.data.errors.forEach(element => {
-          msg+= element.msg +'\n';
-        });
-        this.setState({
-            errorMessage: msg, 
-        });
-        setTimeout(() => {
-            this.setState({errorMessage : "" })
+        (error) => {
+          let msg = '';
+          error.response.data.errors.forEach(element => {
+            msg += element.msg + '\n';
+          });
+          this.setState({
+            errorMessage: msg,
+          });
+          setTimeout(() => {
+            this.setState({ errorMessage: "" })
           }, 4000);
-      });    
-      
-
-    this.setState({
-      username: ''
-      
-    })
+        });
   }
 
   render() {
     return (
       <div>
-        <ErrorMessage message = {this.state.errorMessage} />
+        <ErrorMessage message={this.state.errorMessage} />
         <h3>Create New User</h3>
         <form onSubmit={this.onSubmit}>
-          <div className="form-group"> 
+          <div className="form-group">
             <label>Username: </label>
-            <input  type="text"
-                required
-                className="form-control"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
-                />
+            <input type="text"
+              required
+              className="form-control"
+              value={this.state.username}
+              onChange={this.onChangeUsername}
+            />
           </div>
           <div>
             <label>Email: </label>
-            <input  type="email"
-                required
-                className="form-control"
-                value={this.state.email}
-                onChange={this.onChangeEmail}
-                />
+            <input type="email"
+              required
+              className="form-control"
+              value={this.state.email}
+              onChange={this.onChangeEmail}
+            />
           </div>
           <div>
             <label>password: </label>
-            <input  type="password"
-                required
-                className="form-control"
-                value={this.state.password}
-                onChange={this.onChangePassword}
-                />
+            <input type="password"
+              required
+              className="form-control"
+              value={this.state.password}
+              onChange={this.onChangePassword}
+            />
           </div>
           <div className="form-group">
             <input type="submit" value="Create User" className="btn btn-primary" />

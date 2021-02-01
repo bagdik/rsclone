@@ -14,7 +14,7 @@ const Material = props => {
 
   if (props.isAdmin) {
     actionsEditDelite = <td>
-      <Link to={"/edit/" + props.product._id}>edit</Link> | <a href="#" onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
+      <a href="#" onClick={() => { props.deleteProduct(props.product._id) }}>delete</a>
     </td>
   }
   if (props.isAuthenticated) {
@@ -66,8 +66,7 @@ export default class ProductList extends Component {
 
   deleteProduct(id) {
     axios.delete('http://localhost:5000/product/' + id)
-      .then(response => { console.log(response.data) });
-
+     
     this.setState({
       product: this.state.product.filter(el => el._id !== id)
     })
