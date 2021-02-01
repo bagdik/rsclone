@@ -18,17 +18,16 @@ import UsersList from './components/users.component';
 function App() { 
 
   const {token, login, logout, userId} = useAuthentication();
-  const isAuthenticated = !!token
+  const isAuthenticated = !!token;
+  const isAdmin =userId ===  '6015e0f48bc61bbb6c8400f3' ? true : false;
+      
 
   return (
     <AuthContext.Provider value={{
-      token, login, logout, userId, isAuthenticated
+      token, login, logout, userId, isAuthenticated, isAdmin
     }}>
       <Router>
         <div className="container">
-         
-          {console.log(isAuthenticated)}
-        
         <Navbar />
         <br/>
         <Route path="/" exact component={ProductList} />      
