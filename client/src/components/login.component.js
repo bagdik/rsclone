@@ -39,8 +39,8 @@ export default class LoginUser extends Component {
             password: this.state.password
         }
         const auth = this.context;
-        
-        axios.post('http://localhost:5000/users/login/auth', user)
+
+        axios.post('/users/login/auth', user)
             .then((res, req) => {
                 
                 if (res.status === 200) {

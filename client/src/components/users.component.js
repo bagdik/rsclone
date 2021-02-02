@@ -26,7 +26,7 @@ export default class UsersList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/users/')
+        axios.get('/users/')
             .then(response => {
                 this.setState({ user: response.data })
             })
@@ -37,7 +37,7 @@ export default class UsersList extends Component {
     }
 
     deleteProduct(id) {
-        axios.delete('http://localhost:5000/users/' + id)
+        axios.delete('/users/' + id)
             
 
         this.setState({
@@ -47,7 +47,7 @@ export default class UsersList extends Component {
 
 
     SortList = (materials) => {
-        axios.get('http://localhost:5000/product/')
+        axios.get('/product/')
             .then(response => {
                 if (materials.theme !== 'All') {
                     response.data = response.data.filter(el => el.theme === materials.theme);
