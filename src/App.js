@@ -16,7 +16,7 @@ function App() {
   const { token, login, logout, userId } = useAuthentication();
   const isAuthenticated = !!token;
   const isAdmin = userId === '6015e0f48bc61bbb6c8400f3' ? true : false;
-  const URI = 'https://rs-resources.herokuapp.com/'
+  const URI = 'https://rs-resources.herokuapp.com'
   return (
     <AuthContext.Provider value={{
       token, login, logout, userId, isAuthenticated, isAdmin, URI 
