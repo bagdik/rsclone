@@ -1,10 +1,12 @@
 import React from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
+
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthentication } from './hooks/auth.hook'
 import { AuthContext } from './context/auth.context'
 
-import Navbar from "./components/navbar.component"
+import Navbar from "./components/navbar.component";
+import Footer from "./components/footer.component";
 import CreateUser from "./components/create-user.component";
 import CreateProduct from './components/ceate-product.component';
 import ProductList from './components/product-list.component';
@@ -33,6 +35,7 @@ function App() {
           <Route path="/userslist" component={UsersList} />
         </div>
       </Router>
+      <Footer/>
     </AuthContext.Provider>
   );
 }
