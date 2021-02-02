@@ -53,7 +53,7 @@ export default class ProductList extends Component {
   }
 
   componentDidMount() {
-    axios.get('/product/')
+    axios.get('/product')
       .then(response => {
         this.setState({ product: response.data })
       })
