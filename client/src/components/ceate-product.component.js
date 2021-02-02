@@ -30,7 +30,7 @@ export default class CreateProduct extends Component {
 
   componentDidMount() {
     if (this.context.userId) {
-      axios.get('http://localhost:5000/users/' + this.context.userId)
+      axios.get('/users/' + this.context.userId)
         .then(response => {
           this.setState({ username: response.data.username })          
         })
@@ -87,7 +87,7 @@ export default class CreateProduct extends Component {
       return false;
     }
 
-    axios.post('http://localhost:5000/product/add', product)
+    axios.post('/product/add', product)
       .then(() => this.setState({ redirect: "/productlist" }));
   }
 
