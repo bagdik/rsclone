@@ -117,7 +117,7 @@ export default class ProductList extends Component {
   }
 
   render() {
-    let tableAction = this.context.isAdmin ? <th className="col">Action</th> : null;
+    let tableAction = this.context.isAdmin ? <th scope="col">Action</th> : null;
 
     return (
       <div>
