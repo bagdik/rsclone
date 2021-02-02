@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/auth.context';
 import SortMaterials from './sort-materials-list.component';
@@ -54,7 +53,7 @@ export default class ProductList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/product/')
+    axios.get(this.context.URI+':5000/product/')
       .then(response => {
         this.setState({ product: response.data })
       })
@@ -65,7 +64,7 @@ export default class ProductList extends Component {
   }
 
   deleteProduct(id) {
-    axios.delete('http://localhost:5000/product/' + id)
+    axios.delete(this.context.URI+':5000/product/' + id)
      
     this.setState({
       product: this.state.product.filter(el => el._id !== id)
@@ -73,7 +72,7 @@ export default class ProductList extends Component {
   }
 
   addLike(id) {
-    axios.post('http://localhost:5000/product/update/likes/' + id)
+    axios.post(this.context.URI+':5000/product/update/likes/' + id)
       .then(response => {
         this.setState({ product: this.state.product.map((el) => { if (el._id === id) { el.likes++ } return el; }) })
 
@@ -82,13 +81,13 @@ export default class ProductList extends Component {
   }
 
   addDislike(id) {
-    axios.post('http://localhost:5000/product/update/dislikes/' + id)
+    axios.post(this.context.URI+':5000/product/update/dislikes/' + id)
       .then(response => {
         this.setState({ product: this.state.product.map((el) => { if (el._id === id) { el.dislikes++ } return el; }) })
       });
   }
   SortList = (materials) => {
-    axios.get('http://localhost:5000/product/')
+    axios.get(this.context.URI+':5000/product/')
       .then(response => {
         if (materials.theme !== 'All') {
           response.data = response.data.filter(el => el.theme === materials.theme);
