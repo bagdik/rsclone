@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 import ErrorMessage from './error-message.component';
 
 export default class CreateUser extends Component {
@@ -16,6 +17,7 @@ export default class CreateUser extends Component {
       email: '',
       password: '',
       errorMessage: null,
+      redirect: ""
     }
   }
 
@@ -47,6 +49,15 @@ export default class CreateUser extends Component {
     }
 
     axios.post('/users/add', user)
+    .then(res =>{
+      this.setState({
+      errorMessage: res.data,
+    });
+    setTimeout(() => {
+      this.setState({ errorMessage: "" })
+    }, 4000);
+  })
+  .then(() => this.setState({ redirect: "/login" }))
       
       .catch(
         (error) => {
@@ -64,6 +75,9 @@ export default class CreateUser extends Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+  }
     return (
       <div>
         <ErrorMessage message={this.state.errorMessage} />
