@@ -10,8 +10,7 @@ export default class Footer extends Component {
                 <div>
                     <p>Bobrov Sergey</p>
                     <a href="https://github.com/bobrovsi1988/rs-clone">GitHub</a>
-                </div>
-                
+                </div>                
             </div>
         )
     }
